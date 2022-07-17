@@ -1,32 +1,32 @@
 {% extends '../base.html' %}
 {% block content %}
-{% load static %} 
+{% load static %}
 <div class="add-questions-app container m-3">
-{% for message in messages %}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-   <strong>{{message}}!</strong>
-   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
-<div class="container">
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    <strong>{{message}}!</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  <div class="container">
 
-<div class="add-questions">
-   <!-- Button trigger modal -->
-   <button type="button" class="m-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-   Add Questions
-   </button>
-</div>
+    <div class="add-questions">
+      <!-- Button trigger modal -->
+      <button type="button" class="m-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Add Questions
+      </button>
+    </div>
 
-<div class="question-bank m-3">
-  <div class="row row-cols-1 row-cols-md-2 g-4">
-    {% for question in questions %}
-    <div class="col-sm-6">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title" style="max-height: 10rem;overflow-y: hidden;">{{question.question}}</h5>
-          <span class="badge bg-success ">Marks {{question.marks}}</span>
-          <p class="card-text">
-            {% for option in question.options %}
+    <div class="question-bank m-3">
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for question in questions %}
+        <div class="col-sm-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title" style="max-height: 10rem;overflow-y: hidden;">{{question.question}}</h5>
+              <span class="badge bg-success ">Marks {{question.marks}}</span>
+              <p class="card-text">
+                {% for option in question.options %}
               <div class="form-check">
                 {% if option.correct %}
                 <input class="form-check-input" type="checkbox" checked disabled>
@@ -40,125 +40,135 @@
                 </label>
                 {% endif %}
               </div>
-            {% endfor %}
-          </p>
-         <!--  <button class="btn btn-warning badge bg-warning text-dark"><a href="/quizadmin/{{question.question_id}}" style="text-decoration: none" class="text-dark">Edit</a></button>
- -->        </div>
+              {% endfor %}
+              </p>
+              <!--  <button class="btn btn-warning badge bg-warning text-dark"><a href="/quizadmin/{{question.question_id}}" style="text-decoration: none" class="text-dark">Edit</a></button>
+ -->
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
-    {% endfor %}
-  </div>
-</div>
 
 
 
-<!-- Modal -->
-<form method="POST">
-   {% csrf_token %}
-   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
-         <div class="modal-content">
+    <!-- Modal -->
+    <form method="POST">
+      {% csrf_token %}
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
             <div class="modal-header">
-               <h5 class="modal-title" id="staticBackdropLabel">Add Question</h5>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h5 class="modal-title" id="staticBackdropLabel">Add Question</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="m-2">
-               <div class="mb-3">
-                  <label for="exampleFormControlTextarea1" class="form-label">Enter Question here.</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Indian captial is ____" name="question" required></textarea>
-               </div>
-               <div class="mb-3">
-                  <label for="marks" class="form-label">Enter Marks for this question.</label>
-                  <input type="number" class="form-control" id="marks" placeholder="" value="1" name="marks" min="0">
-               </div>
-               <hr>
-               <strong>Enter Options</strong>
-               <div class="mb-3" id="AnswerOptions">
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Enter Question here.</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                  placeholder="Indian captial is ____" name="question" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="marks" class="form-label">Enter Marks for this question.</label>
+                <input type="number" class="form-control" id="marks" placeholder="" value="1" name="marks" min="0">
+              </div>
+              <hr>
+              <strong>Enter Options</strong>
+              <div class="mb-3" id="AnswerOptions">
                 <div id="optionCollection">
                   <div>
                     <label>Options #1</label>
-                    <input type="text" class="form-control" id="option1" placeholder="option1" value="" name="option1" min="1" required>
+                    <input type="text" class="form-control" id="option1" placeholder="option1" value="" name="option1"
+                      min="1" required>
                   </div>
                   <div>
                     <label>Options #2</label>
-                    <input type="text" class="form-control" id="option2" placeholder="option2" value="" name="option2" min="1" required>  
+                    <input type="text" class="form-control" id="option2" placeholder="option2" value="" name="option2"
+                      min="1" required>
                   </div>
                 </div>
-                  
 
-                  <span class="badge rounded-pill bg-dark" id="add" onclick="addField()">+ ADD</span>
-                  <span class="badge rounded-pill bg-dark" id="remove" onclick="removeField()">- REMOVE</span>
 
-                  <style type="text/css">
-                    #add, #remove{
-                      cursor: pointer;
-                    }
-                    #add:hover, #remove:hover{
-                      transform: scale(1.5);
-                    }
-                  </style>
-                  <script type="text/javascript">
-                    let id = 3;
+                <span class="badge rounded-pill bg-dark" id="add" onclick="addField()">+ ADD</span>
+                <span class="badge rounded-pill bg-dark" id="remove" onclick="removeField()">- REMOVE</span>
 
-                    function addField(){
-                      let div_option = document.createElement("div");
-                      div_option.innerHTML = `
+                <style type="text/css">
+                  #add,
+                  #remove {
+                    cursor: pointer;
+                  }
+
+                  #add:hover,
+                  #remove:hover {
+                    transform: scale(1.5);
+                  }
+                </style>
+                <script type="text/javascript">
+                  let id = 3;
+
+                  function addField() {
+                    let div_option = document.createElement("div");
+                    div_option.innerHTML = `
                       <label>Options #${id}</label>
                       <input type="text" class="form-control" id="options${id}" placeholder="option${id}" value="" name="option${id}" min="1" required>  
                       `;
-                      document.getElementById("optionCollection").append(div_option);
-                      let correct_answer_selects = document.getElementById("correct_answer_selects");
-                      let div_answer = document.createElement("div");
-                      div_answer.className = "form-check";
-                      div_answer.innerHTML = `<input class="form-check-input" type="checkbox" value="option${id}" id="option${id}" name="correct_options">
+                    document.getElementById("optionCollection").append(div_option);
+                    let correct_answer_selects = document.getElementById("correct_answer_selects");
+                    let div_answer = document.createElement("div");
+                    div_answer.className = "form-check";
+                    div_answer.innerHTML = `<input class="form-check-input" type="checkbox" value="option${id}" id="option${id}" name="correct_options">
                         <label class="form-check-label" for="option${id}">
                         Option #${id}
                         </label>
                       `;
-                      correct_answer_selects.append(div_answer);
+                    correct_answer_selects.append(div_answer);
 
-                      id++;
-                    }
+                    id++;
+                  }
 
-                    function removeField(){
-                      let option_collection = document.getElementById("optionCollection");
-                      option_collection.removeChild(option_collection.lastChild);
-                      let correct_answer_selects = document.getElementById("correct_answer_selects");
-                      correct_answer_selects.removeChild(correct_answer_selects.lastChild);
-                      id--;
-                    }
+                  function removeField() {
+                    let option_collection = document.getElementById("optionCollection");
+                    option_collection.removeChild(option_collection.lastChild);
+                    let correct_answer_selects = document.getElementById("correct_answer_selects");
+                    correct_answer_selects.removeChild(correct_answer_selects.lastChild);
+                    id--;
+                  }
 
-                  </script>
-               </div>
-               <div>
-                  <hr>
-                  <div class="mb-3">
-                     <strong>Select Correct Options</strong>
-                     <div id="correct_answer_selects">
-                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="option1" id="option1" name="correct_options">
-                        <label class="form-check-label" for="option1">
+                </script>
+              </div>
+              <div>
+                <hr>
+                <div class="mb-3">
+                  <strong>Select Correct Options</strong>
+                  <div id="correct_answer_selects">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="option1" id="option1"
+                        name="correct_options">
+                      <label class="form-check-label" for="option1">
                         Option #1
-                        </label>
-                     </div>
-                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="option2" id="option2" name="correct_options">
-                        <label class="form-check-label" for="option2">
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="option2" id="option2"
+                        name="correct_options">
+                      <label class="form-check-label" for="option2">
                         Option #2
-                        </label>
-                     </div>
-                     </div>
+                      </label>
+                    </div>
                   </div>
-               </div>
-               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="reset" class="btn btn-warning">Reset</button>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-               </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="reset" class="btn btn-warning">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
             </div>
-         </div>
-</form>
+          </div>
+    </form>
 
+  </div>
 </div>
-</div>  
 {% endblock %}

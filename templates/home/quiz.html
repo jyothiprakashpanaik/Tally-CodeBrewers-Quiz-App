@@ -4,92 +4,94 @@
 
 
 
-{% for message in messages %}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-   <strong>{{message}}!</strong>
-   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
+   {% for message in messages %}
+   <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+      <strong>{{message}}!</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endfor %}
 
 
 
 
    <h3 class="text-center text-danger">
-   {{quiz_title}}
-	</h3>
+      {{quiz_title}}
+   </h3>
    <hr>
-   <form method="post" action="/submit_answer/{{quiz_id}}/{{question_id}}" id="quizForm" name="quizForm" onchange="formvalidator()">
-   	{% csrf_token %}
-   <div class="card my-3">
-      <h5 class="card-header">{{question.question}}</h5>
-      <div class="row begin-countdown">
-        <div class="col-md-12 mt-2 text-center">
-          <button type="button" class="btn btn-primary">
-           Time Left <span class="badge bg-danger countdown">MM:SS</span>
-         </button>
-        </div>
+   <form method="post" action="/submit_answer/{{quiz_id}}/{{question_id}}" id="quizForm" name="quizForm"
+      onchange="formvalidator()">
+      {% csrf_token %}
+      <div class="card my-3">
+         <h5 class="card-header">{{question.question}}</h5>
+         <div class="row begin-countdown">
+            <div class="col-md-12 mt-2 text-center">
+               <button type="button" class="btn btn-primary">
+                  Time Left <span class="badge bg-danger countdown">MM:SS</span>
+               </button>
+            </div>
+         </div>
+         <span id="getTimer" style="display: none;">{{question.timer}}</span>
+
+         <script type="text/javascript">
+
+            console.log(document.querySelector("#getTimer"));
+
+            let starttime = parseInt(document.querySelector("#getTimer").innerText);
+            console.log(starttime);
+            let time = starttime * 60;
+            const contdown = document.querySelector(".countdown");
+
+            setInterval(updateTime, 1000);
+
+            function updateTime() {
+               const minutes = Math.floor(time / 60);
+               let secounds = time % 60;
+               console.log(minutes);
+               secounds = secounds < 10 ? '0' + secounds : secounds;
+               contdown.innerText = `${minutes}: ${secounds}`;
+               time--;
+
+               if (time == 0) {
+                  document.forms["quizForm"].submit();
+               }
+            }
+
+         </script>
+
+         <div class="card-body">
+            <table class="table table-hover border">
+               {% for option in question.options %}
+               <tr>
+                  <td class="col-1"><input class="form-check-input" type="checkbox" value="option{{option.id}}"
+                        id="option{{option.id}}" name="option{{option.id}}"></td>
+                  <td><label class="form-check-label" for="option{{option.id}}">
+                        <strong>{{option.answer}}</strong></label>
+                  </td>
+               </tr>
+               {% endfor %}
+            </table>
+         </div>
+         <div class="card-footer d-flex flex-row-reverse">
+            <button type="submit" class="btn btn-primary mx-2" id="submitForm" disabled><b>Submit</b></button>
+            <button type="skip" class="btn btn-warning mx-2" id="skipForm"><b>Skip</b></button>
+         </div>
       </div>
-      <span id="getTimer" style="display: none;">{{question.timer}}</span>
-
-<script type="text/javascript">
-
-   console.log(document.querySelector("#getTimer"));
-
-   let starttime = parseInt(document.querySelector("#getTimer").innerText);
-   console.log(starttime);
-   let time = starttime*60;
-   const contdown = document.querySelector(".countdown");
-
-   setInterval(updateTime, 1000);
-
-   function updateTime(){
-      const minutes = Math.floor(time / 60);
-      let secounds = time%60;
-      console.log(minutes);
-      secounds = secounds<10?'0'+secounds:secounds;
-      contdown.innerText = `${minutes}: ${secounds}`;
-      time--;
-
-      if(time==0){
-         document.forms["quizForm"].submit();
-      }
-   }
-
-</script>
-
-      <div class="card-body">
-         <table class="table table-hover border">
-         	{% for option in question.options %}
-            <tr>
-               <td class="col-1"><input class="form-check-input" type="checkbox" value="option{{option.id}}" id="option{{option.id}}" name="option{{option.id}}"></td>
-               <td><label class="form-check-label" for="option{{option.id}}">
-                  <strong>{{option.answer}}</strong></label>
-               </td>
-            </tr>
-            {% endfor %}
-         </table>
-      </div>
-      <div class="card-footer d-flex flex-row-reverse">
-         <button type="submit" class="btn btn-primary mx-2" id="submitForm" disabled><b>Submit</b></button>
-         <button type="skip" class="btn btn-warning mx-2" id="skipForm"><b>Skip</b></button>
-      </div>
-	</div>
-	</form>
-   </div>
+   </form>
+</div>
 </div>
 
 <script type="text/javascript">
-	function formvalidator(){
-		let quiz_form = document.querySelector("#quizForm");
-		let checked = quiz_form.querySelectorAll("input[type=checkbox]:checked");
-		let submit_form = quiz_form.querySelector("#submitForm");
-		if(checked.length==0){
-			submit_form.disabled=true;
-		}
-		else{
-			submit_form.disabled=false;
-		}
-	}
+   function formvalidator() {
+      let quiz_form = document.querySelector("#quizForm");
+      let checked = quiz_form.querySelectorAll("input[type=checkbox]:checked");
+      let submit_form = quiz_form.querySelector("#submitForm");
+      if (checked.length == 0) {
+         submit_form.disabled = true;
+      }
+      else {
+         submit_form.disabled = false;
+      }
+   }
 
 </script>
 

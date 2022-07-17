@@ -1,109 +1,111 @@
-
 {% extends '../base.html' %}
 {% block content %}
-{% load static %} 
+{% load static %}
 
 <div class="home-app container m-3">
 
 
-{% for message in messages %}
-<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-   <strong>{{message}}!</strong>
-   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    <strong>{{message}}!</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
 
-<h5>Hello, {{ request.user.username}} 
-
-
-{% if request.user.is_staff %}
-<span class="badge rounded-pill bg-success">
-QuizAdmin
-</span>
-
-{% else %}
-<span class="badge rounded-pill bg-success">
-QuizeTaker
-</span>
-
-{% endif %}
-</h5>
-
-<a class="btn btn-outline-secondary" href="{% url 'logout_view' %}">Logout</a>
-<a href="{% url 'new_quiz_view' %}" type="button" class="btn btn-outline-success">Create New Quizz</a>
-
-<p class="fw-bolder fs-3 my-2">Total Quizzes Create till now: {{quiz_details|length}}</p>
-
-<hr>
-<div class="row row-cols-1 row-cols-md-3 g-4">
+  <h5>Hello, {{ request.user.username}}
 
 
-{% for items in quiz_details %}
+    {% if request.user.is_staff %}
+    <span class="badge rounded-pill bg-success">
+      QuizAdmin
+    </span>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal{{items.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Invite link for <sapn class="text-danger">{{items.title}}</span> </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body"> 
-        <input type="text" value="http://127.0.0.1:8000/{{user}}/{{items.id}}" id="inviteLink">
-        <button onclick="copyToClick()">Copy text</button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+    {% else %}
+    <span class="badge rounded-pill bg-success">
+      QuizeTaker
+    </span>
+
+    {% endif %}
+  </h5>
+
+  <a class="btn btn-outline-secondary" href="{% url 'logout_view' %}">Logout</a>
+  <a href="{% url 'new_quiz_view' %}" type="button" class="btn btn-outline-success">Create New Quizz</a>
+
+  <p class="fw-bolder fs-3 my-2">Total Quizzes Create till now: {{quiz_details|length}}</p>
+
+  <hr>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+
+
+    {% for items in quiz_details %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal{{items.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Invite link for <sapn class="text-danger">
+                {{items.title}}</span> </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="text" value="http://127.0.0.1:8000/{{user}}/{{items.id}}" id="inviteLink">
+            <button onclick="copyToClick()">Copy text</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <div class="col">
-    <div class="card h-100">
-      <img src="{% static 'media/quiz_icon/default.jpg' %}" class="card-img-top" alt="...">
-      <div class="card-body d-flex justify-content-between">
-        <div>
-        <h5 class="card-title">{{ items.title }}</h5>
-        <p class="card-text">{{ items.description }}</p>  
+      <div class="card h-100">
+        <img src="{% static 'media/quiz_icon/default.jpg' %}" class="card-img-top" alt="...">
+        <div class="card-body d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">{{ items.title }}</h5>
+            <p class="card-text">{{ items.description }}</p>
+          </div>
+          <div>
+            <span class="badge bg-warning text-dark" style="cursor: pointer;" onclick="" data-bs-toggle="modal"
+              data-bs-target="#exampleModal{{items.id}}">
+              invite
+            </span>
+            <span class="badge bg-info text-dark">
+              <a href="{{items.id}}/stats" class="text-dark">
+                stats
+              </a>
+            </span>
+          </div>
+
         </div>
-        <div>
-            <span class="badge bg-warning text-dark" style="cursor: pointer;" onclick="" data-bs-toggle="modal" data-bs-target="#exampleModal{{items.id}}">
-            invite
-          </span>
-          <span class="badge bg-info text-dark">
-          <a href="{{items.id}}/stats" class="text-dark">
-          stats            
+        <div class="card-footer d-flex flex-row-reverse bd-highlight">
+          <a href="/quizadmin/{{items.id}}/add_questions">
+            <button type="button" class="btn btn-outline-secondary btn-sm">Edit Quiz</button>
           </a>
-          </span>
         </div>
-        
-      </div>
-      <div class="card-footer d-flex flex-row-reverse bd-highlight">
-        <a href="/quizadmin/{{items.id}}/add_questions">
-          <button type="button" class="btn btn-outline-secondary btn-sm">Edit Quiz</button>
-        </a>
       </div>
     </div>
-  </div>
 
-<script type="text/javascript">
-    function copyToClick(){
-    let copyText = document.getElementById("inviteLink");
+    <script type="text/javascript">
+      function copyToClick() {
+        let copyText = document.getElementById("inviteLink");
 
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); 
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
 
-    navigator.clipboard.writeText(copyText.value);    
-  }  
+        navigator.clipboard.writeText(copyText.value);
+      }
 
-  
-</script>
 
-{% endfor %}
-  
-<!-- 
+    </script>
+
+    {% endfor %}
+
+    <!-- 
 
   <div class="col">
     <div class="card h-100">
@@ -136,7 +138,7 @@ QuizeTaker
 
 
 
-</div>  
+  </div>
 
 
-{% endblock %}
+  {% endblock %}
