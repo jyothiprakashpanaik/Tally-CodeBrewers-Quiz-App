@@ -78,9 +78,36 @@
 
 
 
+<h4 class="text-center mt-3">Question Wise Stats</h4>
 
+<div class="row">
 
+  {% for question in questions_details %}
 
+    <div class="card m-2" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title border rounded border-2 p-2" style="height: 6rem; overflow-y: hidden;">{{question.question}}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+        Marks: <span class="badge bg-success">{{question.question_marks}}</span>
+      </h6>
+      <p class="card-text">
+        <table>
+          <tr>
+            <th>Total No. of Attempts</th>
+            <td></td>
+            <td><span class="badge bg-info text-dark">{{question.total_attempts}}</span></td>
+          </tr>
+          <tr>
+            <th>Total Correct Attempts</th>
+            <td></td>
+            <td><span class="badge bg-info text-dark">{{question.total_correct_attempts}}</span></td>
+          </tr>
+        </table>
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
 </div>  
 

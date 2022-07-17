@@ -133,7 +133,7 @@ def stats(request, qid):
 			"question": question.quiz_question,
 			"question_marks": question.marks,
 			"total_attempts": qr.distinct().count(),
-			"total_correct_attempts": qr.filter(marks__lte=0)
+			"total_correct_attempts": qr.filter(marks__lte=0).distinct().count()
 			})
 	
 	total_number_of_questions = len(questions)
