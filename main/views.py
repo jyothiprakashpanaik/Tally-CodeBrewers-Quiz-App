@@ -151,6 +151,7 @@ def stats(request, qid):
 
 
 	context = {"questions_details": questions_details, "min_score": min_score,"max_score": max_score, 
-	"average_score":average_score,"total_number_of_questions":total_number_of_questions,"total_marks":total_marks,"total_quiz_attend":total_quiz_attend}
+	"average_score":average_score,"total_number_of_questions":total_number_of_questions,"total_marks":total_marks,
+	"total_quiz_attend":total_quiz_attend, "place":quiz.title, "name": request.user.username }
 	return render(request, "main/stats.html", context=context)
 
