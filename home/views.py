@@ -46,20 +46,17 @@ def results(request,quiz_id):
 
 	questions_report = []
 
-
 	for question in questions:
+		marks = QuizResponces.objects.get(user_question=question).marks
 		questions_report.append({
 			"question": question.quiz_question,
-			"corrects_answers": question.corrects_answers,
-			"users_answers": question.users_answers,
-
+			"correct_options": question.answer_options(),
+			"marks_awarded": marks, 
+			"question_marks": question.marks,
 		})
+		score+=marks
 
-
-	print(questions_report)
-
-
-	context = {"score": score, "email": email, "username":username, "quiz_name": quiz.title}
+	context = {"score": score, "email": email, "username":username, "quiz_name": quiz.title, "questions_report": questions_report}
 
 	return render(request, "home/result.html",context=context)
 
