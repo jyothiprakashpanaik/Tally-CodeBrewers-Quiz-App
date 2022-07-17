@@ -10,17 +10,17 @@ from django.db.models import Q
 
 def index(request):
 	total_quiz_attend = 0
+	quiz_list = []
+	
 
 	if request.user.is_authenticated:
-		qr = QuizResponces.objects.filter(user_email=request.user.email).all()
-		a = set()
-		for q in qr:
-			a.add(q.attempt_quiz.id)
-		total_quiz_attend = len(a)
+		quiz_responses = QuizResponces.objects.filter(user_email=request.user.email).values("attempt_quiz").distinct()
+		total_quiz_attend = len(quiz_responses)
 
 	context = {
 	"total_quiz_attend": total_quiz_attend
 	}
+
 	return render(request, "home/index.html", context=context)
 
 

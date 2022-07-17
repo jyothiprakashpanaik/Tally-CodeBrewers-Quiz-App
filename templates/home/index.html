@@ -43,6 +43,10 @@ QuizeTaker
 <a class="btn btn-outline-danger" href="{% url 'login_view' %}">Login</a>
 {% endif %}
 
+{% if request.user.is_staff %}
+<a href="{% url 'new_quiz_view' %}" type="button" class="btn btn-outline-success">Create New Quizz</a>
+{% endif %}
+
 <p class="fw-bolder fs-3 my-2">Total Quizzes Attempted till now: {{total_quiz_attend}}</p>
 
 <hr>
