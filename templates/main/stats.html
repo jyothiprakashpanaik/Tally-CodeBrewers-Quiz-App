@@ -5,32 +5,40 @@
 
 <div class="stats-app container m-3">
 
-
-<table class="table">
+<table class="table table-danger w-25">
   <thead>
+  	<tr>
+  		<th colspan="3" class="text-center ">Quiz Stats</th>
+  	</tr>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Question</th>
-      <th scope="col">No of Marks.</th>
-<!--       <th scope="col">No of correct's.</th>
-      <th scope="col">No of wrong's.</th> -->
+      <th scope="col">Title</th>
+      <th scope="col">No. of #</th>
     </tr>
   </thead>
   <tbody>
-    {% for question in questions_details %}
-    <tr style="height: 5px">
-    
-    	<td>{{question.question}}</td>
-    	<td>{{question.question_marks}}</td>
-
+    <tr>
+      <th scope="row">1</th>
+      <td>Total Number of Questions</td>
+      <td>{{total_number_of_questions}}</td>
+  	</tr>
+  	<tr>
+      <th scope="row">2</th>
+      <td>Total Marks</td>
+      <td>{{total_marks}}</td>
     </tr>
-    {% endfor %}
+    <tr>
+    	<th scope="row">3</th>
+    	<td>Total Quiz Attend</td>
+    	<td>{{total_quiz_attend}}</td>
+    </tr>
   </tbody>
 </table>
 
 
-<b>Max Marks: {{max_marks}}</b>
-
+<table>
+	
+</table>
 
 </div>  
 

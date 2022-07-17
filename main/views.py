@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q,Sum, Count, Min, Max, Avg
 from .models import QuizName,QuizQuestion,QuizAnswer,QuizResponces
 from django.contrib import messages
 
@@ -122,16 +122,35 @@ def add_questions(request, qid):
 def stats(request, qid):
 
 	quiz = QuizName.objects.get(id=qid)
-	questions = QuizQuestion.objects.filter(quiz_name=quiz)
+	questions = QuizQuestion.objects.filter(quiz_name=quiz).all()
+	quiz_responce = QuizResponces.objects.filter(attempt_quiz=quiz)
 
 	questions_details = []
-	mx = 0
+	mx=0
 	for question in questions:
+		qr = quiz_responce.filter(user_question=question).values("user_email")
 		questions_details.append({
 			"question": question.quiz_question,
-			"question_marks": question.marks
+			"question_marks": question.marks,
+			"total_attempts": qr.distinct().count(),
+			"total_correct_attempts": qr.filter(marks__lte=0)
 			})
-		mx += (question.marks)
-	context = {"questions_details": questions_details, "min_marks": 0,"max_marks": mx}
+	
+	total_number_of_questions = len(questions)
+	total_marks = questions.aggregate(Sum('marks'))['marks__sum']
+	total_quiz_attend = quiz_responce.values('user_email').distinct().count()
+
+
+
+	quiz_responce =  quiz_responce.values('user_email').order_by('user_email').annotate(Sum('marks')).values_list('marks__sum')
+	
+
+	max_score = quiz_responce.aggregate(Max('marks__sum'))
+	min_score = quiz_responce.aggregate(Min('marks__sum'))
+	average_score = quiz_responce.aggregate(Avg('marks__sum'))
+
+
+	context = {"questions_details": questions_details, "min_score": min_score,"max_score": max_score, 
+	"average_score":average_score,"total_number_of_questions":total_number_of_questions,"total_marks":total_marks,"total_quiz_attend":total_quiz_attend}
 	return render(request, "main/stats.html", context=context)
 

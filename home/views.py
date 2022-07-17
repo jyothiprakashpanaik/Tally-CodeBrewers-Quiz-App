@@ -9,7 +9,6 @@ from django.db.models import Q
 
 
 def index(request):
-
 	total_quiz_attend = 0
 
 	if request.user.is_authenticated:
@@ -22,44 +21,47 @@ def index(request):
 	context = {
 	"total_quiz_attend": total_quiz_attend
 	}
-	
 	return render(request, "home/index.html", context=context)
 
 
 def results(request,quiz_id):
 
-	email = ""
-	username=""
-	score = 0
-	if request.user.is_authenticated:
-		email = request.user.email
-		username = request.user.username
-	else:
-		email = request.session["email"]
-		username = "AnonymousUser"
+	try:
+		email = ""
+		username=""
+		score = 0
+		if request.user.is_authenticated:
+			email = request.user.email
+			username = request.user.username
+		else:
+			email = request.session["email"]
+			username = "AnonymousUser"
 
 
 
-	quiz = QuizName.objects.get(id=quiz_id)
-	questions = QuizQuestion.objects.filter(quiz_name=quiz).all()
-	
+		quiz = QuizName.objects.get(id=quiz_id)
+		questions = QuizQuestion.objects.filter(quiz_name=quiz).all()
+		
 
-	questions_report = []
+		questions_report = []
 
-	for question in questions:
-		marks = QuizResponces.objects.get(user_question=question).marks
-		questions_report.append({
-			"question": question.quiz_question,
-			"correct_options": question.answer_options(),
-			"marks_awarded": marks, 
-			"question_marks": question.marks,
-		})
-		score+=marks
+		for question in questions:
+			marks = QuizResponces.objects.get(Q(user_email=email) & Q(user_question=question)).marks
+			questions_report.append({
+				"question": question.quiz_question,
+				"correct_options": question.answer_options(),
+				"marks_awarded": marks, 
+				"question_marks": question.marks,
+			})
+			score+=marks
 
-	context = {"score": score, "email": email, "username":username, "quiz_name": quiz.title, "questions_report": questions_report}
+		context = {"score": score, "email": email, "username":username, "quiz_name": quiz.title, "questions_report": questions_report}
 
-	return render(request, "home/result.html",context=context)
+		return render(request, "home/result.html",context=context)
 
+	except Exception as e:
+		print(e)
+		return HttpResponse("Error plz try again.!")
 
 def submit_answer(request, quiz_id, question_id):
 
