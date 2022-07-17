@@ -1,0 +1,58 @@
+
+{% extends '../base.html' %}
+{% block content %}
+
+
+<div class="index-app container m-3">
+
+
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+   <strong>{{message}}!</strong>
+   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+
+<h5>Hello, 
+
+
+{% if request.user.username %}
+	{{ request.user.username}} 
+{% else %}
+	Anonymous User
+{% endif %}
+
+{% if request.user.is_staff %}
+<span class="badge rounded-pill bg-success">
+QuizAdmin
+</span>
+
+{% else %}
+<span class="badge rounded-pill bg-success">
+QuizeTaker
+</span>
+
+{% endif %}
+</h5>
+
+
+{% if request.user.username %}
+<a class="btn btn-outline-secondary" href="{% url 'logout_view' %}">Logout</a>
+{% else %}
+<a class="btn btn-outline-danger" href="{% url 'login_view' %}">Login</a>
+{% endif %}
+
+<p class="fw-bolder fs-3 my-2">Total Quizzes Attempted till now: {{total_quiz_attend}}</p>
+
+<hr>
+
+
+
+
+
+</div>  
+
+
+
+{% endblock %}

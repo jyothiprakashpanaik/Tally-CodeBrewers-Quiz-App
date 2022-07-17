@@ -1,0 +1,49 @@
+{% extends '../base.html' %}
+{% block content %}
+
+
+
+
+<div class="new-quiz-app container m-3">
+
+
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+  <strong>{{message}}!</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+
+{% endfor %}
+
+
+<form class="form-floating m-3 border border-2 p-3" method="post">
+{% csrf_token %}
+
+<div class="form-floating m-3">
+  <input type="text" class="form-control" id="inputTitle" placeholder="Quiz Title" name="inputTitle" required>
+  <label for="inputTitle">Quiz Title</label>
+</div>
+
+<div class="form-floating m-3">
+  <textarea class="form-control" placeholder="This quiz was create by QuizzApp" id="inputDescription" style="height: 100px"></textarea name="inputDescription">
+  <label for="inputDescription">Description</label>
+</div>
+
+<div class="input-group m-3 w-50">
+  <label class="input-group-text" for="inputImage">Upload</label>
+  <input type="file" class="form-control" id="inputImage" name="inputImage" accept="image/*">
+</div>
+
+<div class="d-grid gap-2 col-6 mx-auto">
+  <button class="btn btn-primary" type="submit">Create and Next</button>
+</div>
+
+</form>
+
+
+
+</div>  
+
+
+{% endblock %}

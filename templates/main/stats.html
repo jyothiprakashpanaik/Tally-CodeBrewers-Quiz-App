@@ -1,0 +1,39 @@
+
+{% extends '../base.html' %}
+{% block content %}
+
+
+<div class="stats-app container m-3">
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Question</th>
+      <th scope="col">No of Marks.</th>
+<!--       <th scope="col">No of correct's.</th>
+      <th scope="col">No of wrong's.</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for question in questions_details %}
+    <tr style="height: 5px">
+    
+    	<td>{{question.question}}</td>
+    	<td>{{question.question_marks}}</td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<b>Max Marks: {{max_marks}}</b>
+
+
+</div>  
+
+
+
+{% endblock %}
